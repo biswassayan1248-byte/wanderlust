@@ -27,7 +27,7 @@ body{
 /* footer */
 
 .f-info-socials,
-.f-info-links, f-info-brand {
+.f-info-links, .f-info-brand {
    width: 100%;
   display: flex;
   align-items: center;
