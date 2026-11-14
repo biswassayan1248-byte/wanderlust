@@ -12,66 +12,46 @@
     "Farms": "fa-cow",
     "Arctic": "fa-snowflake"
   };
+  const count = allListing.length;
 %>
 
-<style>
-  #filters {
-    display: flex;
-    flex-wrap: wrap;
-  }
+<header class="page-head">
+  <h1><%= activeCategory || "Places to stay" %></h1>
+  <p><%= count %> <%= count === 1 ? "place" : "places" %><%= activeCategory ? " in this category" : "" %></p>
+</header>
 
-  .filter {
-    text-align: center;
-    margin-right: 1.5rem;
-    margin-top: 2rem;
-    opacity: 0.7;
-    color: #222222;
-    text-decoration: none;
-  }
-
-  .filter:hover,
-  .filter.active {
-    opacity: 1;
-  }
-
-  .filter.active p {
-    border-bottom: 2px solid #222222;
-  }
-</style>
-
-<div id="filters">
+<nav class="filters" aria-label="Filter by category">
   <% for (let category of categories) { %>
     <a href="/listings?category=<%= encodeURIComponent(category) %>"
-       class="filter <%= activeCategory === category ? 'active' : '' %>">
-      <div><i class="fa-solid <%= icons[category] || 'fa-house' %>"></i></div>
-      <p><%= category %></p>
+       class="chip <%= activeCategory === category ? 'active' : '' %>"
+       <%= activeCategory === category ? 'aria-current=page' : '' %>>
+      <i class="fa-solid <%= icons[category] || 'fa-house' %>" aria-hidden="true"></i>
+      <%= category %>
     </a>
   <% } %>
   <% if (activeCategory) { %>
-    <a href="/listings" class="filter">
-      <div><i class="fa-solid fa-xmark"></i></div>
-      <p>Clear</p>
-    </a>
+    <a href="/listings" class="chip"><i class="fa-solid fa-xmark" aria-hidden="true"></i> Show all</a>
   <% } %>
-</div>
+</nav>
 
-<% if (allListing.length === 0) { %>
-  <p class="mt-4">No listings found<%= activeCategory ? " in " + activeCategory : "" %> yet.</p>
+<% if (count === 0) { %>
+  <section class="empty">
+    <h2>No places here yet</h2>
+    <p><%= activeCategory ? "Nobody has added a place in " + activeCategory + " yet." : "Nobody has added a place yet." %> You could be the first.</p>
+    <a href="/listings/new" class="btn btn-ink">Add your place</a>
+  </section>
 <% } %>
 
-<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+<div class="stays">
   <% for (let listing of allListing) { %>
-    <a href="/listings/<%= listing._id %>" class="listing-link">
-      <div class="card col listing-card">
-        <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>" style="height: 20rem;" />
-        <div class="card-img-overlay"></div>
-        <div class="card-body">
-          <p class="card-text">
-            <b><%= listing.title %></b> <br>
-            &#8377;<%= (listing.price || 0).toLocaleString("en-IN") %> / night
-          </p>
-        </div>
+    <a href="/listings/<%= listing._id %>" class="stay">
+      <div class="stay-photo">
+        <img src="<%= listing.image.url %>" alt="<%= listing.title %>" loading="lazy">
+        <% if (listing.category) { %><span class="stay-tag"><%= listing.category %></span><% } %>
       </div>
+      <h2 class="stay-title"><%= listing.title %></h2>
+      <p class="stay-place"><%= [listing.location, listing.country].filter(Boolean).join(", ") %></p>
+      <p class="stay-price"><span class="amount">&#8377;<%= (listing.price || 0).toLocaleString("en-IN") %></span> <span class="per">per night</span></p>
     </a>
   <% } %>
 </div>

@@ -108,7 +108,7 @@ app.use((err, req, res, next) => {
         console.log(err);
     }
 
-    res.status(status).render("listings/error.ejs", { message });
+    res.status(status).render("listings/error.ejs", { message, status });
 });
 
 app.listen(PORT, () => {

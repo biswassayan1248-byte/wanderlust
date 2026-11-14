@@ -1,33 +1,32 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="row mt-3">
-      <div class="col-8 offset-2">
+<div class="form-page narrow">
+  <h1>Create your account</h1>
+  <p class="lede">Sign up to add places and write reviews.</p>
 
-        <h2>Sign up for Wanderlust</h2>
-
-              <form action="/user/" method="post" class="needs-validation" novalidate>
-
-                 <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input name="username" type="text" id="username" class="form-control"  required>
-        <div class="valid-feedback">Looks good!</div>
+  <form action="/user" method="post" class="needs-validation" novalidate>
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input name="username" type="text" id="username" class="form-control" autocomplete="username" required>
+      <div class="invalid-feedback">Choose a username.</div>
     </div>
 
-
-     <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input name="email" type="email" id="email" class="form-control"  required>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input name="email" type="email" id="email" class="form-control" autocomplete="email" required>
+      <div class="invalid-feedback">Enter a valid email address.</div>
     </div>
 
- <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input name="password" type="password" id="password" class="form-control"  required>
-        <div class="valid-feedback">Looks good!</div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input name="password" type="password" id="password" class="form-control" autocomplete="new-password" required>
+      <div class="invalid-feedback">Choose a password.</div>
     </div>
-               
 
-             <button class="btn btn-success  mt-3">Create</button>
+    <div class="form-actions">
+      <button class="btn btn-ink">Create account</button>
+    </div>
+  </form>
 
-              </form>
-        </div>
-        </div>
+  <p class="form-switch-line">Already have an account? <a href="/user/login">Log in</a></p>
+</div>
