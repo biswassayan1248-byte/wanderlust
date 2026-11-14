@@ -1,81 +1,57 @@
-<% layout("/layouts/boilerplate") %> 
-<body>
-    
-  <style>
-    #filters{
-       display :flex;
-       flex-wrap: wrap;
-    }
+<% layout("/layouts/boilerplate") %>
 
-    .filter{
-      text-align: center;
-      margin-right: 1rem;
-      margin-top: 2rem;
-     opacity: 0.7;
-    }
+<%
+  const icons = {
+    "Trending": "fa-fire",
+    "Rooms": "fa-bed",
+    "Iconic cities": "fa-mountain-city",
+    "Mountains": "fa-mountain",
+    "Castles": "fa-chess-rook",
+    "Amazing pools": "fa-person-swimming",
+    "Camping": "fa-campground",
+    "Farms": "fa-cow",
+    "Arctic": "fa-snowflake"
+  };
+  const count = allListing.length;
+%>
 
-    .filter:hover{
-      opacity: 1;
-    }
-  </style>
-      <div id="filters">
-      <div class="filter">
-        <div><i class="fa-solid fa-fire"></i></div>
-         <p>Trending</p>
-      </div>
+<header class="page-head">
+  <h1><%= activeCategory || "Places to stay" %></h1>
+  <p><%= count %> <%= count === 1 ? "place" : "places" %><%= activeCategory ? " in this category" : "" %></p>
+</header>
 
-      <div class="filter">
-        <div> <i class="fa-solid fa-bed"></i></div>
-        <p>Diner</p>
-      </div>
-
-      <div class="filter">
-       <div> <i class="fa-solid fa-mountain-city"></i></div> 
-
-      </div>
-      <div class="filter">
-         <i class="fa-solid fa-mountain"></i>
-         <p>Mountains</p>
-      </div>
-      <div class="filter">
-         <i class="fa-solid fa-"></i>
-         <p>Castles</p>
-      </div>
-      <div class="filter">
-         <i class="fa-solid fa-"></i>
-         <p>Amazing pools</p>
-      </div>
-      <div class="filter">
-         <i class="fa-solid fa-"></i>
-      </div>
-      <div class="filter">
-         <i class="fa-solid fa-"></i>
-      </div>
-      <div class="filter">
-         <i class="fa-solid fa-"></i>
-      </div>
-      </div>
-     
-      <div class="row row-cols-lg-3  row-cols-md-2 row-cols-sm-1">
-    <% for(let listing of allListing){%>
-      <a href="/listings/<%=listing._id%>"  class="listing-link">
-     <div class="card col listing-card" >
-     <img src="<%=listing.image.url%>" class="card-img-top" alt="listing_image" style="height: 20rem;" />
-     <div class="card-img-overlay"></div>
-     <div class="card-body">
-    <p class="card-text">
-     <b><%= listing.title %></b> <br>
-      <%= listing.price.toLocaleString("en-IN") %>/night
-
-    </p>
-   </div>
-   </div>
-     <% } %>
+<nav class="filters" aria-label="Filter by category">
+  <% for (let category of categories) { %>
+    <a href="/listings?category=<%= encodeURIComponent(category) %>"
+       class="chip <%= activeCategory === category ? 'active' : '' %>"
+       <%= activeCategory === category ? 'aria-current=page' : '' %>>
+      <i class="fa-solid <%= icons[category] || 'fa-house' %>" aria-hidden="true"></i>
+      <%= category %>
     </a>
-   </div>
-      
+  <% } %>
+  <% if (activeCategory) { %>
+    <a href="/listings" class="chip"><i class="fa-solid fa-xmark" aria-hidden="true"></i> Show all</a>
+  <% } %>
+</nav>
 
-  
+<% if (count === 0) { %>
+  <section class="empty">
+    <h2>No places here yet</h2>
+    <p><%= activeCategory ? "Nobody has added a place in " + activeCategory + " yet." : "Nobody has added a place yet." %> You could be the first.</p>
+    <a href="/listings/new" class="btn btn-ink">Add your place</a>
+  </section>
+<% } %>
 
-    
-</body>
+<div class="stays">
+  <% for (let listing of allListing) { %>
+    <a href="/listings/<%= listing._id %>" class="stay">
+      <div class="stay-photo">
+        <img src="<%= listing.image.url %>" alt="<%= listing.title %>" loading="lazy">
+        <% if (listing.category) { %><span class="stay-tag"><%= listing.category %></span><% } %>
+      </div>
+      <h2 class="stay-title"><%= listing.title %></h2>
+      <p class="stay-place"><%= [listing.location, listing.country].filter(Boolean).join(", ") %></p>
+      <p class="stay-price"><span class="amount">&#8377;<%= (listing.price || 0).toLocaleString("en-IN") %></span> <span class="per">per night</span></p>
+    </a>
+  <% } %>
+</div>

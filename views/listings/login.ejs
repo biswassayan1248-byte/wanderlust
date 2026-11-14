@@ -1,27 +1,26 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="row mt-3">
-      <div class="col-8 offset-2">
+<div class="form-page narrow">
+  <h1>Log in</h1>
+  <p class="lede">Log in to add places and write reviews.</p>
 
-        <h2>Login to wonderlust </h2>
-
-              <form action="/user/login" method="post" class="needs-validation" novalidate>
-
-                 <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input name="username" type="text" id="username" class="form-control"  required>
-        <div class="valid-feedback">Looks good!</div>
+  <form action="/user/login" method="post" class="needs-validation" novalidate>
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input name="username" type="text" id="username" class="form-control" autocomplete="username" required>
+      <div class="invalid-feedback">Enter your username.</div>
     </div>
 
- <div class="mb-3">
-        <label for="Password" class="form-label">Password</label>
-        <input name="password" type="text" id="password" class="form-control"  required>
-        <div class="valid-feedback">Looks good!</div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input name="password" type="password" id="password" class="form-control" autocomplete="current-password" required>
+      <div class="invalid-feedback">Enter your password.</div>
     </div>
-               
 
-             <button class="btn btn-success  mt-3">Login</button>
+    <div class="form-actions">
+      <button class="btn btn-ink">Log in</button>
+    </div>
+  </form>
 
-              </form>
-        </div>
-        </div>
+  <p class="form-switch-line">New here? <a href="/user">Create an account</a></p>
+</div>
