@@ -4,7 +4,7 @@ const geocode = require("../utils/geocode.js");
 const { categories } = require("../schema.js");
 
 module.exports.index = async (req, res) => {
-    const { category } = req.query;
+    const { category, q, maxPrice } = req.query;
     const filter = {};
 
     // only accept categories we know about
@@ -12,11 +12,24 @@ module.exports.index = async (req, res) => {
         filter.category = category;
     }
 
+    // search box: match the place name against title, location or country
+    if (q && q.trim()) {
+        const safe = q.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const pattern = new RegExp(safe, "i");
+        filter.$or = [{ title: pattern }, { location: pattern }, { country: pattern }];
+    }
+
+    const maxPriceNum = Number(maxPrice);
+    if (maxPrice && Number.isFinite(maxPriceNum) && maxPriceNum > 0) {
+        filter.price = { ...(filter.price || {}), $lte: maxPriceNum };
+    }
+
     const allListing = await Listing.find(filter);
     res.render("listings/index.ejs", {
         allListing,
         categories,
-        activeCategory: filter.category || null
+        activeCategory: filter.category || null,
+        query: { q: q || "", maxPrice: maxPrice || "" }
     });
 };
 

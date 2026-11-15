@@ -28,7 +28,12 @@
   </div>
 </header>
 
-<div class="hero-photo">
+<div class="hero-photo" id="heroPhoto" role="button" tabindex="0" aria-label="View larger photo">
+  <img src="<%= listing.image.url %>" alt="<%= listing.title %>">
+</div>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
   <img src="<%= listing.image.url %>" alt="<%= listing.title %>">
 </div>
 
@@ -126,3 +131,22 @@
 </section>
 
 <script src="/js/map.js"></script>
+<script>
+  (function () {
+    const photo = document.getElementById("heroPhoto");
+    const box = document.getElementById("lightbox");
+    const close = document.getElementById("lightboxClose");
+    if (!photo || !box) return;
+
+    const open = () => { box.classList.add("open"); box.setAttribute("aria-hidden", "false"); };
+    const shut = () => { box.classList.remove("open"); box.setAttribute("aria-hidden", "true"); };
+
+    photo.addEventListener("click", open);
+    photo.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+    });
+    close.addEventListener("click", shut);
+    box.addEventListener("click", (e) => { if (e.target === box) shut(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") shut(); });
+  })();
+</script>
